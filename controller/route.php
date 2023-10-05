@@ -6,7 +6,7 @@ include_once('controller/usersController.php');
 // Récupérer la valeur du paramètre 'page' dans l'URL
 $page = @$_GET['page'];
 
-// Utiliser une structure switch pour router les demandes en fonction de la valeur de 'page'
+
 switch ($page) {
     case 'inscription':
         // Créer une instance du contrôleur des utilisateurs
@@ -21,14 +21,21 @@ switch ($page) {
         $user->getConnexion();
         break;
     case 'deconnexion':
-        session_destroy(); // Détruire la session
-        header('Location: index.php'); // Rediriger vers la page d'accueil
+        // Détruire la session
+        session_destroy(); 
+        // Rediriger vers la page d'accueil
+        header('Location: index.php'); 
         break;
     case 'contact':
         include('view/contact.php');
         $user = new UsersController();
         $user->setContact();
         break;
+    case'UsersList':
+        $user = new UsersController();
+        $user->getUsers();
+        break;
+
     default:
     include('view/accueil.php');
     break;

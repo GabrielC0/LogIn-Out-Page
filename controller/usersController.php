@@ -4,11 +4,15 @@ include_once('model/usersModel.php');
 
 class UsersController {
 
-    private $userModel;
+    private $model;
+
+    private $mdp;
+
+    private $email;
 
     public function __construct() {
         // Initialiser le modèle des utilisateurs dans le constructeur
-        $this->userModel = new UsersModel();
+        $this->model = new UsersModel();
     }
 
     public function formConnexion() {
@@ -21,7 +25,7 @@ class UsersController {
             // Vérifier si les champs email et mot de passe ne sont pas vides
             if(trim($_POST['email']) != "" && trim($_POST['password']) != ""){
                 // Récupérer l'utilisateur correspondant à l'email saisi
-                $user = $this->userModel->getUserByEmail($_POST['email']);
+                $user = $this->model->getUserByEmail($_POST['email']);
                 if($user){
                     // Vérifier si le mot de passe saisi correspond à celui stocké dans la base de données
                     if(password_verify($_POST['password'], $user['password'])){
@@ -58,12 +62,12 @@ class UsersController {
             // Vérifier si tous les champs obligatoires sont remplis
             if(trim($_POST['nom']) != "" && trim($_POST['prenom']) != "" && trim($_POST['email']) != "" && trim($_POST['password']) != ""){
                 // Vérifier si l'email n'est pas déjà utilisé par un autre utilisateur
-                $user = $this->userModel->getUserByEmail($_POST['email']);
+                $user = $this->model->getUserByEmail($_POST['email']);
                 if(!$user){
                     // Hasher le mot de passe avant de l'insérer dans la base de données
                     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                     // Insérer le nouvel utilisateur dans la base de données
-                    $this->userModel->setUser($_POST['nom'], $_POST['prenom'], $_POST['email'], $password, $_POST['id']);
+                    $this->model->setUser($_POST['nom'], $_POST['prenom'], $_POST['email'], $password, $_POST['id']);
                     header('Location: index.php'); // Rediriger vers la page d'accueil
                 } else {
                     $error = "Email déjà utilisé";
@@ -89,7 +93,7 @@ class UsersController {
             // Vérifier si tous les champs obligatoires sont remplis
             if(trim($_POST['nom']) != "" && trim($_POST['prenom']) != "" && trim($_POST['email']) != "" && trim($_POST['message']) != ""){
                    
-                $this->userModel->setMessage($_POST['nom'], $_POST['prenom'], $_POST['email'],$_POST['message']);
+                $this->model->setMessage($_POST['nom'], $_POST['prenom'], $_POST['email'],$_POST['message']);
                 header('Location: index.php'); // Rediriger vers la page d'accueil
                 
             } else {
@@ -100,6 +104,13 @@ class UsersController {
             $this->formContact();
         }
     }
+
+    public function getUsers(){
+    // Appelle la méthode getUsers() du modèle (probablement une classe de modèle) pour obtenir la liste des utilisateurs
+    $users = $this->model->getUsers();
+    // Inclut le fichier 'view/UsersList.php', qui sera responsable de l'affichage de la liste des utilisateurs
+    include('view/UsersList.php');
+}
 }
 ?>
 

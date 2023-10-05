@@ -52,9 +52,10 @@ class UsersModel {
     }
 
     public function setMessage($nom, $prenom, $email, $message) {
-        // Préparer une requête SQL pour l'insertion d'un nouvel utilisateur
+        // Préparer une requête SQL pour l'insertion d'un nouveau message dans la table 'contact'
         $req = $this->bdd->prepare("INSERT INTO contact (nom, prenom, email, message) 
         VALUES (:nom, :prenom, :email, :message)");
+        // Exécuter la requête préparée en liant les valeurs des paramètres aux placeholders
         $req->execute([
             'nom' => $nom,
             'prenom' => $prenom,
@@ -62,6 +63,16 @@ class UsersModel {
             'message' => $message
         ]);
     }
+    
+
+    public function getUsers()
+    {
+        return $this->bdd->query("SELECT * FROM users")->fetchAll(PDO::FETCH_ASSOC);
+    }
+    // Cette méthode récupère tous les utilisateurs depuis une base de données en utilisant une requête SQL SELECT.
+    // Ensuite, les résultats sont récupérés sous forme d'un tableau associatif grâce à PDO::FETCH_ASSOC.
+    //Enfin, le tableau associatif contenant les données des utilisateurs est renvoyé en sortie de la fonction.
+         
 
 }
 ?>
