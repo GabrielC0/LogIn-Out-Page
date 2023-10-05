@@ -110,7 +110,46 @@ class UsersController {
     $users = $this->model->getUsers();
     // Inclut le fichier 'view/UsersList.php', qui sera responsable de l'affichage de la liste des utilisateurs
     include('view/UsersList.php');
-}
+    }
+
+    public function monCompte(){
+        // Appelle la méthode 'getUserById' du modèle pour obtenir les informations de l'utilisateur actuellement connecté (utilisant $_SESSION['id']).
+        $user = $this->model->getUserById($_SESSION['id']);
+        // Inclut le fichier 'view/moncompte.php', qui sera responsable de l'affichage des informations du compte de l'utilisateur.
+        include('view/moncompte.php');
+    }
+
+    public function updateUser(){
+        // Vérifie si le formulaire de mise à jour a été soumis (si le champ 'email' est présent dans la requête POST).
+        if (isset($_POST['email'])) { 
+            if (trim($_POST['nom']) == "" || trim($_POST['prenom']) == "" || trim($_POST['email']) == "") {
+                // Vérifie si les champs 'nom', 'prenom', et 'email' sont vides ou contiennent uniquement des espaces.
+                echo "merci de remplir les champs correctement"; // Affiche un message d'erreur.
+                // Redirige l'utilisateur vers la page "monCompte".
+                $this->monCompte(); 
+            } else {
+                // Si les champs sont valides, appelle la méthode 'updateUser' du modèle pour mettre à jour les informations de l'utilisateur.
+                $user = $this->model->updateUser($_POST['nom'], $_POST['prenom'], $_POST['email'], $_SESSION['id']);
+                if ($user) {
+                    // Si la mise à jour est réussie, met à jour les variables de session 'nom' et 'prenom' avec les nouvelles valeurs.
+                    $_SESSION['nom'] = $_POST['nom'];
+                    $_SESSION['prenom'] = $_POST['prenom'];
+                    // Redirige l'utilisateur vers la page d'accueil.
+                    header('location: index.php'); 
+                    // Affiche un message de confirmation de la modification.
+                    echo "modification OK"; 
+                } else {
+                    echo "modification KO"; 
+                    // Redirige l'utilisateur vers la page "monCompte".
+                    $this->monCompte(); 
+                }
+            }
+        } else {
+            // Si le formulaire n'a pas été soumis, redirige l'utilisateur vers la page "monCompte".
+            $this->monCompte();
+        }
+    }
+    
 }
 ?>
 

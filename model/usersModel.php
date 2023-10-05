@@ -73,6 +73,18 @@ class UsersModel {
     // Ensuite, les résultats sont récupérés sous forme d'un tableau associatif grâce à PDO::FETCH_ASSOC.
     //Enfin, le tableau associatif contenant les données des utilisateurs est renvoyé en sortie de la fonction.
          
+    public function updateUser($nom, $prenom, $email, $id){
+    // Prépare une requête SQL pour mettre à jour les données de l'utilisateur dans la table 'users' en utilisant l'identifiant 'id' comme critère.
+    $update = $this->bdd->prepare("UPDATE users SET nom=?,prenom=?,email=? WHERE id=?");
+    // Exécute la requête préparée en remplaçant les placeholders par les valeurs des paramètres.
+    if ($update->execute([$nom, $prenom, $email,$id])) {
+        // Si la mise à jour est réussie, retourne vrai.
+        return true;
+    } else {
+        // Si la mise à jour échoue, retourne faux.
+        return false;
+    }
+}
 
 }
 ?>

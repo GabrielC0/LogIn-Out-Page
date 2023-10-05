@@ -35,7 +35,10 @@ switch ($page) {
         $user = new UsersController();
         $user->getUsers();
         break;
-
+    case 'monCompte':
+        $user = new UsersController();
+        $user->updateUser();
+    break;
     default:
     include('view/accueil.php');
     break;

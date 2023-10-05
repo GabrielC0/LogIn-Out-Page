@@ -18,6 +18,7 @@
                 if (@$_SESSION['nom']) {
                     echo '<a href="?page=deconnexion">deconnexion</a>';
                     echo '<a href="?page=UsersList">UsersList</a>';
+                    echo '<a href="?page=monCompte">monCompte</a>';
                 } else {
                     echo '<a href="?page=connexion">connexion</a>';
                     echo '<p> </p>';
